@@ -157,3 +157,4 @@ include "Views/Templates/header.php";
         alert('Los datos se han agregado a localStorage.');
     });
 </script>
+
