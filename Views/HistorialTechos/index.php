@@ -89,28 +89,30 @@ try {
 
         $tablaHTML .= '<tfoot>
                         <tr>
+                            <td colspan="2"><strong>manoObra:</strong></td>
+                            <td>S/' . $manoObra . '</td>
+                            <td>S/' . $manoObra . '</td>
+                            <td>S/' . $manoObra . '</td>
+                        </tr>
+                        <tr>
                             <td colspan="2"><strong>Total:</strong></td>
                             <td>S/' . $precioBajoT . '</td>
                             <td>S/' . $precioMedioT . '</td>
                             <td>S/' . $precioAltoT . '</td>
                         </tr>
                     </tfoot>';
-                    $tablaHTML .= '<tfoot>
-                    <tr>
-                        <td colspan="2"><strong>manoObra:</strong></td>
-                        <td>S/' . $manoObra . '</td>
-                        <td>S/' . $manoObra . '</td>
-                        <td>S/' . $manoObra . '</td>
-                    </tr>
-                </tfoot>';
 
         $tablaHTML .= '</tbody></table>';
 
     
-        $tablaHTML .= '<form method="POST" action="http://localhost/constructora/Views/Eliminar/eliminarHistorialTecho.php">
-                  <input type="hidden" name="fecha" value="' . $fecha . '">
-                  <button type="submit" name="eliminar" class="btn btn-danger">Eliminar</button>
-              </form><br>';
+        $tablaHTML .= '
+            <td colspan="5">
+            <button class="agregar-btn" data-fecha="' . $fecha . '" data-precio-bajo="' . $precioBajoT . '" data-precio-medio="' . $precioMedioT . '" data-precio-alto="' . $precioAltoT . '">Agregar al presupuesto general</button>
+        </td>
+        <form method="POST" action="http://localhost/constructora/Views/Eliminar/eliminarHistorialTecho.php">
+                <input type="hidden" name="fecha" value="' . $fecha . '">
+                <button type="submit" name="eliminar" class="btn btn-danger">Eliminar</button>
+            </form><br>';
 
         // Mostrar la tabla en la página
         echo $tablaHTML;
@@ -123,3 +125,35 @@ include "Views/Templates/footer.php";
 ?>
   </div>
 </div>
+
+<script>
+    $('.agregar-btn').click(function () {
+        var fecha = $(this).data('fecha');
+        var precioBajoT = $(this).data('precio-bajo');
+        var precioMedioT = $(this).data('precio-medio');
+        var precioAltoT = $(this).data('precio-alto');
+        var nombre = "Presupuesto Techos"
+
+        // Obtener los datos almacenados previamente en localStorage
+        var datosTotalesJSON = localStorage.getItem('datosTotales');
+        var datosTotales = [];
+
+        if (datosTotalesJSON !== null) {
+            datosTotales = JSON.parse(datosTotalesJSON);
+        }
+
+        // Agregar los nuevos datos al array
+        datosTotales.push({
+            nombre: nombre,
+            fecha: fecha,
+            precioBajoT: precioBajoT,
+            precioMedioT: precioMedioT,
+            precioAltoT: precioAltoT
+        });
+
+        // Guardar el array actualizado en localStorage
+        localStorage.setItem('datosTotales', JSON.stringify(datosTotales));
+
+        alert('Los datos se han agregado a localStorage.');
+    });
+</script>
